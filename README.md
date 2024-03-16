@@ -15,7 +15,13 @@ config/dbconfig.ts file contains all the information to make a connection to dat
 
 # Docker
 
-- https://hub.docker.com/repositories/sandeep799   you can pull the docker image from here
+- https://hub.docker.com/repositories/sandeep799 -----> My docker hub account
+- https://hub.docker.com/r/sandeep799/qpassignmentapp/tags -----> You can pull the docker image from here
+
+# Create a .env file and pase below variables
+
+PORT=3000
+SECRET_KEY=QUESTIONPRO ----> JWT secret key
 
 # Managing User Roles by SuperAdmin
 
