@@ -10,9 +10,9 @@ services:
       - ./models/index.ts:/docker-entrypoint-indexdb.d/0_index.ts
       - $HOME/database:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3307:3307
     expose:
-      - 3306
+      - 3307
 
     environment:
       MYSQL_DATABASE: db_conn

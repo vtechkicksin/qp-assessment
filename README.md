@@ -5,6 +5,18 @@ Grocery booking APIs
 API Documentation
 This document outlines the endpoints and their functionalities for interacting with the grocery application.
 
+# Instruction to run the project
+
+1. Connecting to mysql database
+
+config/dbconfig.ts file contains all the information to make a connection to database info like HOST,USER,PASSWORD,DB(database name) which in my case is "db_conn", dialect i thought to put all the info in .env file but .env is not pushed to github that's why i keep this info.
+
+# Once the connection is established tables will automatically be created because i have used sequelize as an ORM which will take care of table making at the time of hitting APIs.
+
+# Docker
+
+- https://hub.docker.com/repositories/sandeep799   you can pull the docker image from here
+
 # Managing User Roles by SuperAdmin
 
 In our system, a superAdmin has the authority to modify the roles of users. This includes the ability to promote a user to an admin or demote an admin to a regular user. This feature provides flexibility in managing user roles and permissions, allowing the superAdmin to adapt the system to changing organizational needs and user responsibilities.
@@ -15,22 +27,16 @@ In our system, a superAdmin has the authority to modify the roles of users. This
 
 -> URL:http://localhost:3000/updateRole
 
-
 Request Payload:
 {
-    "superAdmin":"superAdmin.logipe@gmail.com", 
-    "emailToChange":"osho@gmail.com",
-    "rolesToChange":"user" 
+"superAdmin":"superAdmin.logipe@gmail.com",
+"emailToChange":"osho@gmail.com",
+"rolesToChange":"user"
 }
-
-
 
 superAdmin => this id will be checked from config file
 emailToChange => the desired user to change the roles
 rolesToChange => either user or admin
-
-
-
 
 1. Register User (POST)
    Register a new user with the system.
