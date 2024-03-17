@@ -4,9 +4,7 @@ import * as grocery from "../controller/index";
 
 const router = express.Router();
 
-
-
-router.post("/", (req: Request, res: Response) => {
+router.post("/login", (req: Request, res: Response) => {
   grocery.default.login(req, res);
 });
 

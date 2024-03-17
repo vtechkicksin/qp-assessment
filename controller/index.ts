@@ -37,7 +37,6 @@ class Grocery {
         password: hashPassword,
         roles: "user",
       });
-      console.log("user is registered");
       return res.send({
         message: "User Register",
       });
@@ -50,7 +49,6 @@ class Grocery {
   static async login(req: Request, res: Response): Promise<any> {
     try {
       const { email, password } = req.body;
-      console.log("req.body", req.body);
 
       const data = await db.User.findOne({
         where: {
@@ -58,7 +56,6 @@ class Grocery {
         },
       });
 
-      console.log("data>>>>", data?.dataValues);
       if (data != null) {
         const result = bcrypt.compareSync(password, data.dataValues.password);
         if (result) {
@@ -140,15 +137,34 @@ class Grocery {
       const arr = req.body;
       const jsonString = JSON.stringify(arr);
       const parsedArray = JSON.parse(jsonString);
-      console.log("array from request", arr);
+      const arrayToUpdateInGroery=[];
+      let alreadyExistedItem = [];
+      let flag = true;
       for (let i = 0; i < parsedArray.length; i++) {
-        let userId = crypto.randomUUID();
-        parsedArray[i].item_id = userId;
+        const existingItem = await db.GroceryItems.findOne({
+          where: {
+            name: parsedArray[i].name,
+          },
+        });
+        if (existingItem) {
+          alreadyExistedItem.push(parsedArray[i].name);
+        } else {
+          let userId = crypto.randomUUID();
+          parsedArray[i].item_id = userId;
+          arrayToUpdateInGroery.push(parsedArray[i]);
+          flag = false;
+        }
       }
-      console.log("parsedArray>>>>>>>", parsedArray);
-      await db.GroceryItems.bulkCreate(parsedArray);
+      let message;
+      if (flag) {
+        message = "No new item";
+      } else {
+        message = "Grocery is Added";
+        await db.GroceryItems.bulkCreate(arrayToUpdateInGroery);
+      }
       return res.send({
-        message: "Grocery is updated",
+        message,
+        alreadyExistedItem,
       });
     } catch (error) {
       console.log(error);
@@ -159,7 +175,6 @@ class Grocery {
   static async removeGroceryItem(req: Request, res: Response): Promise<any> {
     try {
       const arr = req.body;
-      console.log("arr>>>>>", arr);
       const data = await db.GroceryItems.findAll({
         where: {
           name: {
@@ -167,7 +182,6 @@ class Grocery {
           },
         },
       });
-      console.log("data>>>", data);
       if (data.length === 0) {
         res.send({
           message: "Data Not Found In Grocery Store",
@@ -211,7 +225,6 @@ class Grocery {
       const arr = req.body;
       const jsonString = JSON.stringify(arr);
       const inputData = JSON.parse(jsonString);
-      // const inputData = parsedArray.map((item) => item.name);
       let itemNotInGrocery = [];
 
       let flag = false;
@@ -272,7 +285,6 @@ class Grocery {
           // If the item exists, update the quantity_left field
           const newQuantityLeft =
             existingItem.dataValues.quantity_left - quantity;
-          console.log("newQuantityLeft>>>>", newQuantityLeft);
           if (newQuantityLeft < 0) {
             ItemInsufficientGrocery.push(name);
           } else {
@@ -322,5 +334,3 @@ class Grocery {
 }
 
 export default Grocery;
-
-// export { registerApi, login, addNewGrocery, removeGroceryItem, veiwGrocery, updateGrocery, changeRoles, order }
